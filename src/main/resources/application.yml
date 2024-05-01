@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: AI-Secretary-Bot
+
+google:
+  credentials:
+    file-name: src/main/resources/config/google/credentials.json
+
+server:
+  port: 8080
+
+logging:
+  level:
+    uz.sardorbroo.secretarybot: DEBUG
