@@ -6,6 +6,11 @@ google:
   credentials:
     file-name: src/main/resources/config/google/credentials.json
 
+ngrok:
+  # Static domain is used into SendPulse bot.
+  # If you change domain, then you should change domain in SendPulse too
+  static-domain: suddenly-classic-eagle.ngrok-free.app
+
 server:
   port: 8080
 
