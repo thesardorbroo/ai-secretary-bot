@@ -19,7 +19,6 @@ import uz.sardorbroo.secretarybot.service.EventService;
 import uz.sardorbroo.secretarybot.service.dto.EventDTO;
 import uz.sardorbroo.secretarybot.service.mapper.EventMapper;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -49,7 +48,7 @@ public class EventServiceImpl implements EventService {
 
         Events events = calendar.events()
                 .list(calendarId)
-                .setTimeMin(new DateTime(new Date()))
+                .setTimeMin(new DateTime(System.currentTimeMillis()))
                 .setSingleEvents(true)
                 .setOrderBy("startTime")
                 .execute();
