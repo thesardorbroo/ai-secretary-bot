@@ -11,6 +11,10 @@ ngrok:
   # If you change domain, then you should change domain in SendPulse too
   static-domain: suddenly-classic-eagle.ngrok-free.app
 
+send-pulse:
+  bot-id: 6622838ece3e20457907d003
+  event-id: 807ebd67968d4a8ee3ebd10db927a77b/8139783
+
 server:
   port: 8080
 
