@@ -18,7 +18,10 @@ import uz.sardorbroo.secretarybot.exception.InvalidArgumentException;
 import uz.sardorbroo.secretarybot.service.EventService;
 import uz.sardorbroo.secretarybot.service.dto.EventDTO;
 import uz.sardorbroo.secretarybot.service.mapper.EventMapper;
+import uz.sardorbroo.secretarybot.service.util.DateTimeUtils;
 
+import java.time.Instant;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -46,9 +49,13 @@ public class EventServiceImpl implements EventService {
 
         Calendar calendar = getCalendar();
 
+        DateTime endOfToday = new DateTime(Date.from(DateTimeUtils.getEndOfToday()));
+        DateTime now = new DateTime(System.currentTimeMillis());
+
         Events events = calendar.events()
                 .list(calendarId)
-                .setTimeMin(new DateTime(System.currentTimeMillis()))
+                .setTimeMin(now)
+                .setTimeMax(endOfToday)
                 .setSingleEvents(true)
                 .setOrderBy("startTime")
                 .execute();
@@ -101,7 +108,9 @@ public class EventServiceImpl implements EventService {
             throw new InvalidArgumentException("Invalid argument is passed! Index must not be blank!");
         }
 
-        List<EventDTO> events = getAllEvents(calendarId);
+        List<EventDTO> events = getAllEvents(calendarId).stream()
+                .filter(event -> Instant.now().isBefore(event.getStart()))
+                .collect(Collectors.toList());
         if (CollectionUtils.isEmpty(events)) {
             log.debug("Events are not found in calendar. CalendarID: {}", calendarId);
             return Optional.empty();

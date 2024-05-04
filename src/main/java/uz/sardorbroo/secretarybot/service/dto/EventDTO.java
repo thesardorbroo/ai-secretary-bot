@@ -1,10 +1,11 @@
 package uz.sardorbroo.secretarybot.service.dto;
 
-import com.google.api.client.util.DateTime;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
+import uz.sardorbroo.secretarybot.service.util.DateTimeUtils;
 
 import java.time.Instant;
 
@@ -23,4 +24,14 @@ public class EventDTO {
     private Instant start;
 
     private Instant end;
+
+    @JsonProperty("beauty_start")
+    public String getBeautyStart() {
+        return DateTimeUtils.beauty(start);
+    }
+
+    @JsonProperty("beauty_end")
+    public String getBeautyEnd() {
+        return DateTimeUtils.beauty(end);
+    }
 }

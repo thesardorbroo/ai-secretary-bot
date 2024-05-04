@@ -25,6 +25,9 @@ public class SPPublishEventRequestDTO {
     @JsonProperty("bot_id")
     private String botId;
 
+    @JsonProperty("bin")
+    private String bin;
+
     public SPPublishEventRequestDTO setChatBotsChannel(ChatBotsChannel channel) {
 
         if (Objects.nonNull(channel)) {

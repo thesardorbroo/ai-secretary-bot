@@ -15,6 +15,7 @@ import uz.sardorbroo.secretarybot.util.StringMaskUtils;
 
 import java.util.Objects;
 import java.util.Optional;
+import java.util.UUID;
 
 @Slf4j
 @Service
@@ -36,6 +37,7 @@ public class SPEventServiceImpl implements SPEventService {
         SPPublishEventRequestDTO requestDTO = new SPPublishEventRequestDTO();
         requestDTO.setEmail(email);
         requestDTO.setBotId(properties.getBotId());
+        requestDTO.setBin(UUID.randomUUID().toString());
         // Only with Telegram now
         requestDTO.setChatBotsChannel(ChatBotsChannel.TG);
 
