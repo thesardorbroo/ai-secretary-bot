@@ -7,13 +7,13 @@ import com.google.api.client.util.DateTime;
 import com.google.api.services.calendar.Calendar;
 import com.google.api.services.calendar.model.Event;
 import com.google.api.services.calendar.model.Events;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
-import uz.sardorbroo.secretarybot.constants.Constants;
 import uz.sardorbroo.secretarybot.exception.InvalidArgumentException;
 import uz.sardorbroo.secretarybot.service.EventService;
 import uz.sardorbroo.secretarybot.service.dto.EventDTO;
@@ -28,6 +28,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
+@Getter
 @Service
 @RequiredArgsConstructor
 public class EventServiceImpl implements EventService {
@@ -111,6 +112,7 @@ public class EventServiceImpl implements EventService {
         List<EventDTO> events = getAllEvents(calendarId).stream()
                 .filter(event -> Instant.now().isBefore(event.getStart()))
                 .collect(Collectors.toList());
+
         if (CollectionUtils.isEmpty(events)) {
             log.debug("Events are not found in calendar. CalendarID: {}", calendarId);
             return Optional.empty();
@@ -125,12 +127,5 @@ public class EventServiceImpl implements EventService {
     @Override
     public void delete(String eventId) {
 
-    }
-
-    private Calendar getCalendar() {
-
-        return new Calendar.Builder(transport, jsonFactory, credential)
-                .setApplicationName(Constants.APPLICATION_NAME)
-                .build();
     }
 }

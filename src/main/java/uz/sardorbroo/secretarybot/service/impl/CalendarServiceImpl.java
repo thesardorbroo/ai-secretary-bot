@@ -4,18 +4,19 @@ import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.services.calendar.Calendar;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.NotImplementedException;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
-import uz.sardorbroo.secretarybot.constants.Constants;
-import uz.sardorbroo.secretarybot.exception.AbsException;
 import uz.sardorbroo.secretarybot.exception.InvalidArgumentException;
 import uz.sardorbroo.secretarybot.service.CalendarService;
 
 import java.util.Optional;
 
 @Slf4j
+@Getter
 @Service
 @RequiredArgsConstructor
 public class CalendarServiceImpl implements CalendarService {
@@ -33,17 +34,6 @@ public class CalendarServiceImpl implements CalendarService {
             throw new InvalidArgumentException("Invalid argument is passed! CalendarID must not be blank!");
         }
 
-        Calendar calendar = getCalendar();
-
-        // calendar.calendarList().get(calendarId);
-
-        return Optional.empty();
-    }
-
-    private Calendar getCalendar() {
-
-        return new Calendar.Builder(transport, jsonFactory, credential)
-                .setApplicationName(Constants.APPLICATION_NAME)
-                .build();
+        throw new NotImplementedException("Get Google calendar by ID logic is not implemented yet");
     }
 }
