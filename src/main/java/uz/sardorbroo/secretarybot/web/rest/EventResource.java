@@ -8,6 +8,7 @@ import uz.sardorbroo.secretarybot.service.EventService;
 import uz.sardorbroo.secretarybot.service.dto.EventDTO;
 import uz.sardorbroo.secretarybot.web.rest.util.ResponseUtils;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -46,6 +47,16 @@ public class EventResource {
         Optional<EventDTO> eventOptional = service.findEventByIndex(index, calendarId);
         ResponseEntity<EventDTO> response = ResponseUtils.wrap(eventOptional);
         log.debug("Event in index result. Response: {}", response);
+        return response;
+    }
+
+    @GetMapping("/event/date/{date}")
+    public ResponseEntity<Collection<EventDTO>> getEventsOfDate(@PathVariable String date,
+                                                                @RequestParam("calendarId") String calendarId) {
+        log.debug("REST request to fetch events of date");
+        List<EventDTO> events = service.getEventsOfDateWithSPDate(date, calendarId);
+        ResponseEntity<Collection<EventDTO>> response = ResponseUtils.wrap(events, false);
+        log.debug("Date events fetch. Response: {}", response);
         return response;
     }
 

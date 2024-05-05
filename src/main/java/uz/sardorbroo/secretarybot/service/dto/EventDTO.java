@@ -34,4 +34,9 @@ public class EventDTO {
     public String getBeautyEnd() {
         return DateTimeUtils.beauty(end);
     }
+
+    @JsonProperty("beauty_text")
+    public String getBeautyText() {
+        return String.format("<b>%s</b>\n%s - %s", summary, getBeautyStart(), getBeautyEnd());
+    }
 }

@@ -21,10 +21,9 @@ import uz.sardorbroo.secretarybot.service.mapper.EventMapper;
 import uz.sardorbroo.secretarybot.service.util.DateTimeUtils;
 
 import java.time.Instant;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -40,22 +39,23 @@ public class EventServiceImpl implements EventService {
 
     @SneakyThrows
     @Override
-    public List<EventDTO> getAllEvents(String calendarId) {
+    public List<EventDTO> getAllEvents(DateTime date, String calendarId) {
         log.debug("Start fetch events by date and calendar ID. CalendarID: {} ", calendarId);
 
-        if (StringUtils.isBlank(calendarId)) {
-            log.warn("Invalid argument is passed! CalendarID must not be blank!");
-            throw new InvalidArgumentException("Invalid argument is passed! CalendarID must not be blank!");
+        if (Objects.isNull(date)) {
+            log.warn("Invalid argument is passed! Date must not be null!");
+            throw new InvalidArgumentException("Invalid argument is passed! Date must not be null!");
         }
+
+        validateCalendarId(calendarId);
 
         Calendar calendar = getCalendar();
 
         DateTime endOfToday = new DateTime(Date.from(DateTimeUtils.getEndOfToday()));
-        DateTime now = new DateTime(System.currentTimeMillis());
 
         Events events = calendar.events()
                 .list(calendarId)
-                .setTimeMin(now)
+                .setTimeMin(date)
                 .setTimeMax(endOfToday)
                 .setSingleEvents(true)
                 .setOrderBy("startTime")
@@ -72,18 +72,34 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
+    public List<EventDTO> getEventsOfDate(String dateAsString, String calendarId) {
+        log.debug("Start fetch all events of date. Date: {} | CalendarID: {}", dateAsString, calendarId);
+
+        validateStringDate(dateAsString);
+
+        validateCalendarId(calendarId);
+
+        LocalDateTime date = DateTimeUtils.convertOnlySPDate(dateAsString);
+        if (!DateTimeUtils.isToday(date)) {
+            log.warn("Invalid argument is passed! Date should be equal to today! Date: {}", date);
+            throw new InvalidArgumentException("Invalid argument is passed! Date should be equal to today!");
+        }
+
+        DateTime dateTime = new DateTime(Date.from(DateTimeUtils.getStartOfDate(date)));
+        List<EventDTO> events = getAllEvents(dateTime, calendarId);
+
+        log.debug("Events are fetch successfully. Events count: {}", events.size());
+        return events;
+    }
+
+    @Override
     @SneakyThrows
     public Optional<EventDTO> findById(String eventId, String calendarId) {
         log.debug("Start fetch event by ID. EventID: {} | CalendarID: {}", eventId, calendarId);
 
-        if (StringUtils.isBlank(eventId)) {
-            log.warn("Invalid argument is passed! EventID must not be blank!");
-            throw new InvalidArgumentException("Invalid argument is passed! EventID must not be blank!");
-        }
-        if (StringUtils.isBlank(calendarId)) {
-            log.warn("Invalid argument is passed! CalendarID must not be blank!");
-            throw new InvalidArgumentException("Invalid argument is passed! CalendarID must not be blank!");
-        }
+        validateEventId(eventId);
+
+        validateCalendarId(calendarId);
 
         Calendar calendar = getCalendar();
 
@@ -104,10 +120,7 @@ public class EventServiceImpl implements EventService {
             throw new InvalidArgumentException("Invalid argument is passed! Index must not be negative!");
         }
 
-        if (StringUtils.isBlank(calendarId)) {
-            log.warn("Invalid argument is passed! Index must not be blank!");
-            throw new InvalidArgumentException("Invalid argument is passed! Index must not be blank!");
-        }
+        validateCalendarId(calendarId);
 
         List<EventDTO> events = getAllEvents(calendarId).stream()
                 .filter(event -> Instant.now().isBefore(event.getStart()))
@@ -127,5 +140,36 @@ public class EventServiceImpl implements EventService {
     @Override
     public void delete(String eventId) {
 
+    }
+
+    @Override
+    public List<EventDTO> getEventsOfDateWithSPDate(String dateAsString, String calendarId) {
+        log.debug("Start fetch all events of date");
+
+        validateStringDate(dateAsString);
+
+        // dateAsString = dateAsString.replaceAll("\\.", "-");
+        return getEventsOfDate(dateAsString, calendarId);
+    }
+
+    private void validateStringDate(String dateAsString) {
+        if (StringUtils.isBlank(dateAsString)) {
+            log.warn("Invalid argument is passed! Date must not be blank!");
+            throw new InvalidArgumentException("Invalid argument is passed! Date must not be blank!");
+        }
+    }
+
+    private void validateCalendarId(String calendarId) {
+        if (StringUtils.isBlank(calendarId)) {
+            log.warn("Invalid argument is passed! CalendarID must not be blank!");
+            throw new InvalidArgumentException("Invalid argument is passed! CalendarID must not be blank!");
+        }
+    }
+
+    private void validateEventId(String eventId) {
+        if (StringUtils.isBlank(eventId)) {
+            log.warn("Invalid argument is passed! EventID must not be blank!");
+            throw new InvalidArgumentException("Invalid argument is passed! EventID must not be blank!");
+        }
     }
 }
