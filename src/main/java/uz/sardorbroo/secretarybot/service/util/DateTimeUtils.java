@@ -79,6 +79,15 @@ public class DateTimeUtils {
         return BEAUTIFUL_FORMATTER.format(Date.from(date));
     }
 
+    public static String beauty(LocalTime date) {
+
+        if (Objects.isNull(date)) {
+            return null;
+        }
+
+        return BEAUTIFUL_FORMATTER.format(date);
+    }
+
     private static ZonedDateTime parse(String dateAsString, DateTimeFormatter formatter) {
 
         return ZonedDateTime.parse(dateAsString, formatter);

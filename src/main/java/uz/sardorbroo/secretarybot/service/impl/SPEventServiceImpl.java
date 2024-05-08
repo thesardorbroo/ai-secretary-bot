@@ -4,12 +4,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
-import uz.sardorbroo.secretarybot.client.SPFeignClient;
+import uz.sardorbroo.secretarybot.client.feign.SPFeignClient;
 import uz.sardorbroo.secretarybot.exception.InvalidArgumentException;
 import uz.sardorbroo.secretarybot.properties.SPProperties;
 import uz.sardorbroo.secretarybot.service.SPEventService;
-import uz.sardorbroo.secretarybot.service.dto.SPPublishEventRequestDTO;
-import uz.sardorbroo.secretarybot.service.dto.SPResponseDTO;
+import uz.sardorbroo.secretarybot.service.dto.sendpulse.request.SPPublishEventRequestDTO;
+import uz.sardorbroo.secretarybot.service.dto.sendpulse.response.SPResponseDTO;
 import uz.sardorbroo.secretarybot.service.enumeration.ChatBotsChannel;
 import uz.sardorbroo.secretarybot.util.StringMaskUtils;
 
@@ -26,7 +26,7 @@ public class SPEventServiceImpl implements SPEventService {
     private final SPProperties properties;
 
     @Override
-    public Optional<SPResponseDTO> publishEventForEmail(String email) {
+    public Optional<SPResponseDTO> publishEventForEmail(String email, String spEventId) {
         log.debug("Start publish SendPulse event for given email. Email: {}", StringMaskUtils.mask(email));
 
         if (StringUtils.isBlank(email)) {
@@ -43,7 +43,7 @@ public class SPEventServiceImpl implements SPEventService {
 
         log.debug("DTO: {}", requestDTO);
 
-        SPResponseDTO response = client.publishEvent(requestDTO);
+        SPResponseDTO response = client.publishEvent(spEventId, requestDTO);
         if (Objects.isNull(response) || !Boolean.TRUE.equals(response.getResult())) {
             log.warn("Unexpected response from SendPulse! Response: {}", response);
             throw new RuntimeException("Unexpected response from SendPulse! Response: " + response);

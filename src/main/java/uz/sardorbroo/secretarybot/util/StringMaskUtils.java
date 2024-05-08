@@ -1,6 +1,7 @@
 package uz.sardorbroo.secretarybot.util;
 
 import org.apache.commons.lang3.StringUtils;
+import uz.sardorbroo.secretarybot.exception.InvalidArgumentException;
 
 public class StringMaskUtils {
     private static final Integer MAX_WIDTH_OF_MASKED_STRING = 8;
@@ -13,5 +14,15 @@ public class StringMaskUtils {
         }
 
         return StringUtils.abbreviate(source, MASK, MAX_WIDTH_OF_MASKED_STRING);
+    }
+
+    // todo move it to another class or rename StringMaskUtils to another, not StringUtils
+    public static String requireNotBlank(String source, String message) {
+
+        if (StringUtils.isBlank(source)) {
+            throw new InvalidArgumentException(message);
+        }
+
+        return source;
     }
 }

@@ -13,7 +13,14 @@ ngrok:
 
 send-pulse:
   bot-id: 6622838ece3e20457907d003
-  event-id: 807ebd67968d4a8ee3ebd10db927a77b/8139783
+
+openai:
+  assistant-id: asst_yBY3jnAKGQChwn9VIEkSAN8G
+  api-key: secret
+
+redis:
+  host: localhost
+  port: 6379
 
 server:
   port: 8080

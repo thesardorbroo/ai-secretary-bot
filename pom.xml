@@ -26,9 +26,25 @@
         <google-oauth-client-jetty.version>1.34.1</google-oauth-client-jetty.version>
         <openfeign.version>4.1.0</openfeign.version>
         <swagger.version>2.5.0</swagger.version>
+        <open-ai-java-client.version>0.14.0</open-ai-java-client.version>
+        <redis-java-client.version>5.1.2</redis-java-client.version>
     </properties>
 
     <dependencies>
+        <!-- Redis -->
+        <dependency>
+            <groupId>redis.clients</groupId>
+            <artifactId>jedis</artifactId>
+            <version>${redis-java-client.version}</version>
+        </dependency>
+
+        <!-- Ai Whisper -->
+        <dependency>
+            <groupId>com.theokanning.openai-gpt3-java</groupId>
+            <artifactId>service</artifactId>
+            <version>${open-ai-java-client.version}</version>
+        </dependency>
+
         <!-- Ngrok -->
         <dependency>
             <groupId>com.github.alexdlaird</groupId>
@@ -41,6 +57,13 @@
             <groupId>org.mapstruct</groupId>
             <artifactId>mapstruct</artifactId>
             <version>${mapstruct.version}</version>
+        </dependency>
+
+        <!-- Lombok -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <optional>true</optional>
         </dependency>
 
         <!-- Google -->
@@ -95,13 +118,6 @@
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-ui</artifactId>
             <version>${springdoc-openapi-ui.version}</version>
-        </dependency>
-
-        <!-- Lombok -->
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <optional>true</optional>
         </dependency>
     </dependencies>
 

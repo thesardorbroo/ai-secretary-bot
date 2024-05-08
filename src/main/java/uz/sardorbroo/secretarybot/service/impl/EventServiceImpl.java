@@ -6,11 +6,13 @@ import com.google.api.client.json.JsonFactory;
 import com.google.api.client.util.DateTime;
 import com.google.api.services.calendar.Calendar;
 import com.google.api.services.calendar.model.Event;
+import com.google.api.services.calendar.model.EventDateTime;
 import com.google.api.services.calendar.model.Events;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.NotImplementedException;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -135,6 +137,11 @@ public class EventServiceImpl implements EventService {
 
         log.debug("Event is fetched successfully by index. EventID: {} | Index: {}", event.getId(), index);
         return Optional.of(event);
+    }
+
+    @Override
+    public Optional<Void> create(String calendarId) {
+        throw new NotImplementedException("Create new event in calendar logic is not implemented yet!");
     }
 
     @Override

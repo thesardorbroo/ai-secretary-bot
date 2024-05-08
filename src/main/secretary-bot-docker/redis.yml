@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+  redis:
+    container_name: ai-secretary-bot-redis
+    image: redis:latest
+    volumes:
+      - ./redis-logs:/${REDIS_BASE_DIR}/logs
+    environment:
+      ALLOW_EMPTY_PASSWORD: yes
+      REDIS_PORT_NUMBER: 6379
+    ports:
+      - 127.0.0.1:6379:6379

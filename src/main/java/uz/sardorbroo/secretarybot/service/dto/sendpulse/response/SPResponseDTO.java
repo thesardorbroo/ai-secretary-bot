@@ -1,4 +1,4 @@
-package uz.sardorbroo.secretarybot.service.dto;
+package uz.sardorbroo.secretarybot.service.dto.sendpulse.response;
 
 import lombok.Data;
 

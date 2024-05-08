@@ -6,11 +6,11 @@ import org.springframework.context.annotation.Configuration;
 
 @Data
 @Configuration
-@ConfigurationProperties(prefix = "send-pulse")
-public class SPProperties {
+@ConfigurationProperties(prefix = "redis")
+public class RedisProperties {
 
-    private String botId;
+    private String host;
 
-    private String eventId;
+    private Integer port;
 
 }

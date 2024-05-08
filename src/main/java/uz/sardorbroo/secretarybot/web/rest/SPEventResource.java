@@ -6,13 +6,10 @@ import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import uz.sardorbroo.secretarybot.constants.Constants;
 import uz.sardorbroo.secretarybot.service.SPEventService;
-import uz.sardorbroo.secretarybot.service.dto.SPResponseDTO;
+import uz.sardorbroo.secretarybot.service.dto.sendpulse.response.SPResponseDTO;
 import uz.sardorbroo.secretarybot.web.rest.util.ResponseUtils;
 
 import java.util.Optional;
@@ -25,10 +22,11 @@ public class SPEventResource {
 
     private final SPEventService service;
 
-    @PostMapping("/event/publish/{email}")
-    public ResponseEntity<SPResponseDTO> publishEvent(@Valid @NotNull @Email(regexp = Constants.EMAIL_EXTRA_REGEX) @PathVariable String email) {
+    @PostMapping("/event/publish")
+    public ResponseEntity<SPResponseDTO> publishEvent(@Valid @Email(regexp = Constants.EMAIL_EXTRA_REGEX) @RequestParam("email") String email,
+                                                      @RequestParam("sp_event_id") String spEventId) {
         log.debug("REST request to publish SendPulse event for email");
-        Optional<SPResponseDTO> spResponseOptional = service.publishEventForEmail(email);
+        Optional<SPResponseDTO> spResponseOptional = service.publishEventForEmail(email, spEventId);
         ResponseEntity<SPResponseDTO> response = ResponseUtils.wrap(spResponseOptional);
         log.debug("Publishing SendPulse event result. Response: {}", response);
         return response;

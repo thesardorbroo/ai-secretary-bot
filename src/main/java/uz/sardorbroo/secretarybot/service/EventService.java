@@ -16,6 +16,8 @@ public interface EventService extends Calendar {
 
     Optional<EventDTO> findEventByIndex(Integer index, String calendarId);
 
+    Optional<Void> create(String calendarId);
+
     void delete(String eventId);
 
     default List<EventDTO> getAllEvents(String calendarId) {
